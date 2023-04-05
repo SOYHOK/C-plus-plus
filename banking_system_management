@@ -1,0 +1,102 @@
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+
+using namespace std;
+
+// Function declarations
+void takeTicket(int[], int &);
+void showWaitingQueue(int[], int);
+void serveCustomer(int[], int &);
+
+int main()
+{
+    const int MAX_CAPACITY = 100;   // Maximum capacity of waiting queue
+    int waitingQueue[MAX_CAPACITY]; // Array to hold waiting queue
+    int queueSize = 0;              // Current size of waiting queue
+
+    srand(time(NULL)); // Initialize random seed
+
+    while (true) // Run until user quits
+    {
+        cout << "Welcome to the Bank Management System!" << endl;
+        cout << "Please select from the following options:" << endl;
+        cout << "1. Take a ticket" << endl;
+        cout << "2. View waiting queue" << endl;
+        cout << "3. Serve next customer" << endl;
+        cout << "4. Quit" << endl;
+
+        int choice;
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            takeTicket(waitingQueue, queueSize); // Take a ticket and add to queue
+            break;
+        case 2:
+            showWaitingQueue(waitingQueue, queueSize); // Show waiting queue
+            break;
+        case 3:
+            serveCustomer(waitingQueue, queueSize); // Serve next customer in queue
+            break;
+        case 4:
+            cout << "Thank you for using our system. Goodbye!" << endl;
+            return 0; // Exit program
+        default:
+            cout << "Invalid input. Please try again." << endl;
+            break;
+        }
+    }
+
+    return 0;
+}
+
+void takeTicket(int waitingQueue[], int &queueSize)
+{
+    if (queueSize >= 100) // Check if waiting queue is full
+    {
+        cout << "Sorry, the waiting queue is full. Please come back later." << endl;
+        return;
+    }
+
+    int ticketNumber = rand() % 1000 + 1;     // Generate random ticket number
+    waitingQueue[queueSize++] = ticketNumber; // Add to waiting queue
+
+    cout << "You have taken ticket #" << ticketNumber << "." << endl;
+    cout << "Please proceed to the waiting area." << endl;
+}
+
+void showWaitingQueue(int waitingQueue[], int queueSize)
+{
+    if (queueSize == 0) // Check if waiting queue is empty
+    {
+        cout << "The waiting queue is currently empty." << endl;
+        return;
+    }
+
+    cout << "Current waiting queue:" << endl;
+    for (int i = 0; i < queueSize; i++)
+    {
+        cout << waitingQueue[i] << " ";
+    }
+    cout << endl;
+}
+
+void serveCustomer(int waitingQueue[], int &queueSize)
+{
+    if (queueSize == 0) // Check if waiting queue is empty
+    {
+        cout << "The waiting queue is currently empty." << endl;
+        return;
+    }
+
+    int ticketNumber = waitingQueue[0]; // Get first customer in queue
+    for (int i = 0; i < queueSize - 1; i++)
+    {
+        waitingQueue[i] = waitingQueue[i + 1]; // Shift remaining customers up in queue
+    }
+    queueSize--;
+
+    cout << "Now serving customer #" << ticketNumber << "." << endl;
+}
